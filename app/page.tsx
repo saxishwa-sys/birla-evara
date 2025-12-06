@@ -3,45 +3,22 @@
 import React, { useEffect, useState } from "react";
 
 /**
- * Fixed full app/page.tsx — parsing errors resolved and mobile-fit tweak added.
- * Paste into app/page.tsx (replace existing).
- * Requires Tailwind CSS.
+ * app/page.tsx
+ * Single-file Next.js App Router page (TypeScript + Tailwind).
+ *
+ * Notes:
+ * - Requires Tailwind + app/layout.tsx (with <meta name="viewport"...>) and globals.css.
+ * - Place all images referenced under /public:
+ *   /backdrop.jpg, /building.jpg, /floorplan-3bhk.jpg, /floorplan-4bhk.jpg,
+ *   /pool.jpg, /gallery1.jpg /gallery2.jpg /gallery3.jpg /gallery4.jpg, /hsr_map.jpg
  */
 
 export default function Page() {
-  // Update or inject viewport meta so small screens get a slightly reduced initial-scale.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const isMobile = window.innerWidth < 768;
-    const scale = isMobile ? "0.95" : "1";
-    let meta = document.querySelector('meta[name="viewport"]') as HTMLMetaElement | null;
-    const content = `width=device-width, initial-scale=${scale}, maximum-scale=${scale}`;
-    if (meta) {
-      meta.content = content;
-    } else {
-      meta = document.createElement("meta");
-      meta.name = "viewport";
-      meta.content = content;
-      document.head.appendChild(meta);
-    }
-    // Optional: update on resize (debounced minimal)
-    let t: any;
-    function onResize() {
-      clearTimeout(t);
-      t = setTimeout(() => {
-        const nowMobile = window.innerWidth < 768;
-        const newScale = nowMobile ? "0.95" : "1";
-        if (meta) meta.content = `width=device-width, initial-scale=${newScale}, maximum-scale=${newScale}`;
-      }, 150);
-    }
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
   return <LandingPage />;
 }
 
-function LandingPage(): JSX.Element {
+// removed explicit return type annotation to avoid missing JSX namespace error
+function LandingPage() {
   return (
     <div className="min-h-screen bg-[#fff4e6] text-[#2b2b2b] antialiased overflow-x-hidden">
       <Header />
@@ -87,8 +64,16 @@ function Header() {
     { label: "Contact Us", href: "#enquiry-form" },
   ];
 
-  // labels that should show the same "active/pill" style
-  const activeLabels = ["Home", "Overview", "Highlights", "Floor Plan", "Price", "Amenities", "Gallery", "Location"];
+  const activeLabels = [
+    "Home",
+    "Overview",
+    "Highlights",
+    "Floor Plan",
+    "Price",
+    "Amenities",
+    "Gallery",
+    "Location",
+  ];
 
   return (
     <header className="sticky top-0 z-40 bg-[#f7efe6] border-b border-[#e9e0d6]">
@@ -113,7 +98,6 @@ function Header() {
           ))}
         </nav>
 
-        {/* Mobile menu button visible only on small */}
         <div className="md:hidden">
           <button onClick={() => setOpen((s) => !s)} className="p-2 rounded-md bg-[#e9dfd6]">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#5b4a42]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -123,7 +107,6 @@ function Header() {
         </div>
       </div>
 
-      {/* Mobile nav panel */}
       {open && (
         <div className="md:hidden border-t border-[#e9e0d6] bg-[#fffaf5]">
           <div className="mx-auto max-w-7xl px-4 py-4 grid gap-2">
@@ -131,7 +114,7 @@ function Header() {
               <a
                 key={n.label}
                 href={n.href}
-                className={`px-4 py-2 rounded-md text-sm ${activeLabels.includes(n.label) ? "bg-[#6b5146] text-white" : "text-[#4b4038] bg-white"} shadow-sm`}
+                className={`px-4 py-2 rounded-md text-sm shadow-sm ${activeLabels.includes(n.label) ? "bg-[#6b5146] text-white" : "text-[#4b4038] bg-white"}`}
               >
                 {n.label}
               </a>
@@ -151,15 +134,15 @@ function HeroBackdrop() {
 
       <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/5 to-transparent" />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16 md:py-24 text-white">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 md:py-20 text-white">
         <div className="max-w-2xl">
-          <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-white/80">Pre-launch | Luxury Residences</p>
+          <p className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-white/80">Pre-launch | Luxury Residences</p>
 
-          <h1 className="mt-3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight drop-shadow-lg">
+          <h1 className="mt-3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight drop-shadow-lg break-words">
             Birla Evara — Premium 3 &amp; 4 BHK Homes in HSR Layout
           </h1>
 
-          <p className="mt-4 text-xs sm:text-sm md:text-base text-white/90 max-w-lg">
+          <p className="mt-4 text-xs sm:text-sm md:text-base text-white/90 max-w-lg break-words">
             Live in the heart of HSR Layout with premium living, warm tones and an elegant design language crafted for families.
           </p>
 
@@ -183,7 +166,7 @@ function HeroBackdrop() {
         </div>
       </div>
 
-      {/* (REMOVED) small building card previously at bottom-right */}
+      {/* removed small building card for cleaner mobile */}
     </section>
   );
 }
@@ -199,11 +182,11 @@ function Overview() {
 
   return (
     <section id="overview" className="border-b border-[#f0d7c2] bg-[#fff7eb]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         <div className="mb-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#2b2b2b]">Project Overview</h2>
-            <p className="text-xs sm:text-sm text-[#5a5a5a] mt-2">A gated community with premium 3 &amp; 4 BHK residences designed for peaceful yet connected living.</p>
+            <p className="text-xs sm:text-sm text-[#5a5a5a] mt-2 max-w-prose">A gated community with premium 3 &amp; 4 BHK residences designed for peaceful yet connected living.</p>
           </div>
 
           <div className="hidden sm:block">
@@ -236,7 +219,7 @@ function Highlights() {
 
   return (
     <section id="highlights" className="border-b border-[#f0d7c2] bg-[#fff6ee]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#2b2b2b]">Property Highlights</h2>
           <div className="hidden sm:block">
@@ -266,7 +249,7 @@ function FloorPlansOnly() {
 
   return (
     <section id="floorplans" className="border-b border-[#f0d7c2] bg-[#fffaf5]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#2b2b2b]">Floor Plans</h2>
           <div className="hidden sm:block">
@@ -274,7 +257,7 @@ function FloorPlansOnly() {
           </div>
         </div>
 
-        <p className="text-xs sm:text-sm text-[#5a5a5a] mb-6">Choose a layout to view floor plans and learn more about sizes & indicative pricing.</p>
+        <p className="text-xs sm:text-sm text-[#5a5a5a] mb-6 max-w-prose break-words">Choose a layout to view floor plans and learn more about sizes & indicative pricing.</p>
 
         <div className="grid gap-4 sm:grid-cols-2">
           {plans.map((p) => (
@@ -304,7 +287,7 @@ function FloorPlansOnly() {
 function PricingOnly() {
   return (
     <section id="pricing" className="border-b border-[#f0d7c2] bg-[#fff4e6]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#2b2b2b]">Pricing</h2>
           <div className="hidden sm:block">
@@ -431,7 +414,7 @@ function FeaturesSection() {
                 <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d9cfc5] text-[#6b5146]">
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 12l2 2 4-4" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </span>
-                <span className="text-sm sm:text-base text-[#4b4038]">{f}</span>
+                <span className="text-sm sm:text-base text-[#4b4038] break-words">{f}</span>
               </li>
             ))}
           </ul>
@@ -453,7 +436,7 @@ function Amenities() {
 
   return (
     <section id="amenities" className="border-b border-[#f0d7c2] bg-[#fffaf5]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Amenities</h2>
           <div className="hidden sm:block"><PricePoint label="From" price="₹ 1.25 Cr*" /></div>
@@ -462,7 +445,7 @@ function Amenities() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {amen.map((a) => (
             <div key={a} className="rounded-xl border border-[#f0d7c2] bg-white p-3 text-sm">
-              <p className="font-semibold text-[#1b5e3a]">{a}</p>
+              <p className="font-semibold text-[#1b5e3a] break-words">{a}</p>
             </div>
           ))}
         </div>
@@ -476,7 +459,7 @@ function Gallery() {
   const imgs = ["/gallery1.jpg", "/gallery2.jpg", "/gallery3.jpg", "/gallery4.jpg"];
   return (
     <section id="gallery" className="border-b border-[#f0d7c2] bg-[#fff7f0]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Gallery</h2>
           <div className="hidden sm:block"><PricePoint label="Indicative" price="₹ 1.25 Cr*" /></div>
@@ -498,7 +481,7 @@ function Gallery() {
 function LocationMapLeft() {
   return (
     <section id="location" className="border-b border-[#f0d7c2] bg-[#fffaf0]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Location</h2>
           <div className="hidden sm:block"><PricePoint label="Starting" price="₹ 1.25 Cr*" /></div>
@@ -535,7 +518,7 @@ function LocationMapLeft() {
   );
 }
 
-/* ---------------- Enquiry ---------------- */
+/* ---------------- Enquiry (LEFT: FORM FIELDS, RIGHT: INFO + DISCLAIMER) ---------------- */
 function Enquiry() {
   return (
     <section id="enquiry-form" className="py-8 sm:py-10 bg-[#fffaf5] border-t border-[#ece2d8]">
@@ -545,7 +528,7 @@ function Enquiry() {
             <h3 className="text-xl sm:text-2xl font-semibold text-[#3f3430]">Get Full Details & Pre-Launch Offer</h3>
             <p className="mt-2 text-xs sm:text-sm text-[#6b5b50]">Share your contact details and our team will reach out shortly.</p>
 
-            <div className="mt-4 bg-white rounded-xl p-4 sm:p-6 border border-[#e9e0d6] shadow-sm">
+            <div className="mt-4 bg-white rounded-xl p-4 sm:p-6 border border[#e9e0d6] shadow-sm">
               <FormFull />
             </div>
           </div>
@@ -748,6 +731,10 @@ function FloatingPopup() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const f = e.currentTarget;
+    const data = new FormData(f);
+    // eslint-disable-next-line no-console
+    console.log("popup submit", Object.fromEntries(data.entries()));
     setShowSuccess(true);
     setOpen(false);
   }
@@ -810,10 +797,10 @@ function FloatingPopup() {
 /* ---------------- Price row helper ---------------- */
 function PriceRow({ title, price, subtitle }: { title: string; price: string; subtitle?: string }) {
   return (
-    <div className="flex items-center justify-between border-b border-[#f0d7c2] pb-2 text-sm">
+    <div className="flex items-center justify-between border-b border-[#efe6dc] py-2">
       <div>
-        <div className="text-sm font-medium">{title}</div>
-        {subtitle && <div className="text-xs text-[#5a5a5a]">{subtitle}</div>}
+        <div className="text-sm font-medium text-[#4b4038]">{title}</div>
+        {subtitle && <div className="text-xs text-[#6b5b50]">{subtitle}</div>}
       </div>
       <div className="text-sm font-semibold text-[#1b5e3a]">{price}</div>
     </div>
