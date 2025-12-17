@@ -2,35 +2,21 @@
 
 import React, { useEffect, useState } from "react";
 
-/**
- * app/page.tsx
- * Single-file Next.js App Router page (TypeScript + Tailwind).
- *
- * Notes:
- * - Requires Tailwind + app/layout.tsx (with <meta name="viewport"...>) and globals.css.
- * - Place all images referenced under /public:
- *   /backdrop.jpg, /building.jpg, /floorplan-3bhk.jpg, /floorplan-4bhk.jpg,
- *   /pool.jpg, /gallery1.jpg /gallery2.jpg /gallery3.jpg /gallery4.jpg, /hsr_map.jpg
- */
-
 export default function Page() {
   return <LandingPage />;
 }
 
-// removed explicit return type annotation to avoid missing JSX namespace error
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#fff4e6] text-[#2b2b2b] antialiased overflow-x-hidden">
+    <div className="min-h-screen bg-[#f6f2ea] text-[#174f2a] antialiased overflow-x-hidden font-serif">
       <Header />
 
-      <main className="flex-1">
+      <main className="flex-1 pt-16 md:pt-20 lg:pt-24">
         <HeroBackdrop />
         <Overview />
         <Highlights />
-
-        <FloorPlansOnly />
         <PricingOnly />
-
+        <FloorPlansOnly />
         <FloorIntro />
         <FeaturesSection />
         <Amenities />
@@ -50,48 +36,41 @@ function LandingPage() {
 }
 
 /* ---------------- Header ---------------- */
+
 function Header() {
   const [open, setOpen] = useState(false);
+
   const nav = [
     { label: "Home", href: "#" },
     { label: "Overview", href: "#overview" },
-    { label: "Highlights", href: "#highlights" },
-    { label: "Price", href: "#pricing" },
-    { label: "Amenities", href: "#amenities" },
     { label: "Floor Plan", href: "#floorplan" },
     { label: "Gallery", href: "#gallery" },
     { label: "Location", href: "#location" },
-    { label: "Contact Us", href: "#enquiry-form" },
-  ];
-
-  const activeLabels = [
-    "Home",
-    "Overview",
-    "Highlights",
-    "Floor Plan",
-    "Price",
-    "Amenities",
-    "Gallery",
-    "Location",
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-[#f7efe6] border-b border-[#e9e0d6]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 md:py-4 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#1f7a3f]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 md:h-20 lg:h-24 flex items-center justify-between text-white">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-[#8b4f3a] flex items-center justify-center text-white font-bold">B</div>
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center font-bold">
+            GA
+          </div>
           <div className="leading-tight">
-            <div className="text-base sm:text-lg font-semibold">Birla Evara</div>
-            <div className="text-[11px] sm:text-xs text-[#6b5b50]">Sarjapur</div>
+            <div className="text-base sm:text-lg font-semibold">
+              Godrej Arden
+            </div>
+            <div className="text-[11px] sm:text-xs opacity-90">
+              Sigma 3, Greater Noida
+            </div>
           </div>
         </div>
 
-        <nav className="hidden lg:flex items-center gap-3">
+        <nav className="hidden lg:flex items-center gap-6">
           {nav.map((n) => (
             <a
               key={n.label}
               href={n.href}
-              className={`px-3 py-1.5 rounded-full text-sm ${activeLabels.includes(n.label) ? "bg-[#6b5146] text-white" : "text-[#4b4038] hover:bg-[#ecdccd]"}`}
+              className="text-sm tracking-wide opacity-90 hover:opacity-100"
             >
               {n.label}
             </a>
@@ -99,109 +78,156 @@ function Header() {
         </nav>
 
         <div className="md:hidden">
-          <button onClick={() => setOpen((s) => !s)} className="p-2 rounded-md bg-[#e9dfd6]">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#5b4a42]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+          <button
+            onClick={() => setOpen(!open)}
+            className="p-2 rounded-md bg-white/20"
+          >
+            ☰
           </button>
         </div>
-      </div>
 
-      {open && (
-        <div className="md:hidden border-t border-[#e9e0d6] bg-[#fffaf5]">
-          <div className="mx-auto max-w-7xl px-4 py-4 grid gap-2">
-            {nav.map((n) => (
-              <a
-                key={n.label}
-                href={n.href}
-                className={`px-4 py-2 rounded-md text-sm shadow-sm ${activeLabels.includes(n.label) ? "bg-[#6b5146] text-white" : "text-[#4b4038] bg-white"}`}
-              >
-                {n.label}
-              </a>
-            ))}
+        {open && (
+          <div className="absolute top-full left-0 right-0 bg-[#1f7a3f] border-t border-white/20 md:hidden">
+            <div className="p-4 grid gap-3">
+              {nav.map((n) => (
+                <a
+                  key={n.label}
+                  href={n.href}
+                  className="text-sm text-white opacity-90"
+                >
+                  {n.label}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </header>
   );
 }
 
-/* ---------------- HERO with backdrop (uses /backdrop.jpg) ---------------- */
+/* ---------------- Hero ---------------- */
+
 function HeroBackdrop() {
   return (
-    <section className="relative h-[380px] md:h-[520px] lg:h-[640px] overflow-hidden border-b border-[#e9e0d6]">
-      <img src="/backdrop.jpg" alt="hero backdrop" className="absolute inset-0 w-full h-full object-cover brightness-75" />
+    <section className="relative h-[380px] md:h-[520px] lg:h-[640px] overflow-hidden border-b border-[#e4dccf]">
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/5 to-transparent" />
+      {/* BLINK STYLE */}
+      <style jsx global>{`
+        @keyframes blink {
+          0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.3;
+            transform: scale(1.5);
+          }
+        }
+        .blink-dot {
+          position: absolute;
+          top: 6px;
+          right: 6px;
+          width: 9px;
+          height: 9px;
+          background: #22c55e;
+          border-radius: 50%;
+          box-shadow: 0 0 8px rgba(34, 197, 94, 0.9);
+          animation: blink 1.2s infinite ease-in-out;
+        }
+      `}</style>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 md:py-20 text-white">
-        <div className="max-w-2xl">
-          <p className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-white/80">Pre-launch | Luxury Residences</p>
+      <img
+        src="/backdrop.jpg"
+        alt="Godrej Arden Hero"
+        className="absolute inset-0 w-full h-full object-cover brightness-75"
+      />
+      <div className="absolute inset-0 bg-black/40" />
 
-          <h1 className="mt-3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight drop-shadow-lg break-words">
-            Birla Evara — Premium 3 &amp; 4 BHK Homes in HSR Layout
-          </h1>
+      <div className="relative z-10 mx-auto max-w-6xl px-4 py-12 md:py-20 text-white">
+        <h1 className="text-3xl md:text-5xl font-semibold tracking-widest uppercase">
+          Godrej Arden — 2, 3 & 4 BHK Homes
+        </h1>
 
-          <p className="mt-4 text-xs sm:text-sm md:text-base text-white/90 max-w-lg break-words">
-            Live in the heart of HSR Layout with premium living, warm tones and an elegant design language crafted for families.
-          </p>
+        <p className="mt-3 text-base text-white/90 tracking-wide">
+          📍 Sigma 3, Greater Noida
+        </p>
 
-          <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:gap-3 gap-3">
-            <a href="#enquiry-form" className="w-full sm:w-auto text-center rounded-lg bg-[#1b5e3a] px-4 py-2 text-sm font-medium text-white shadow hover:bg-[#167249]">
-              Get Pre-Launch Price
-            </a>
-            <a href="#overview" className="w-full sm:w-auto text-center text-sm font-medium text-white/90 underline hover:text-white">View Project Overview</a>
+        <div className="mt-6 max-w-xl rounded-xl bg-black/55 p-6 backdrop-blur-md border border-white/20">
+          <div className="text-sm uppercase tracking-widest opacity-90">
+            2, 3 & 4 BHK Apartments
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-4 text-[11px] text-white/90">
-            <div>
-              <div className="uppercase tracking-wide">Starting From</div>
-              <div className="font-semibold text-white">₹ 1.25 Cr*</div>
+          <div className="mt-3 flex items-end gap-3">
+            <div className="text-4xl md:text-5xl font-bold">₹ 2.30 Cr*</div>
+            <div className="text-xs uppercase tracking-widest opacity-90 mb-1">
+              Starting From
             </div>
-            <div>
-              <div className="uppercase tracking-wide">Location</div>
-              <div className="font-semibold text-white">HSR Layout, Sector 2</div>
+          </div>
+
+          {/* OFFER BLINK */}
+          <div className="relative mt-3 inline-block bg-[#2e5f45] px-4 py-1 text-xs font-semibold rounded">
+            Hurry – Offer Ends Soon!
+            <span className="blink-dot" />
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+            <HeroEOI title="2 BHK" value="₹ 5 Lacs" />
+            <HeroEOI title="3 BHK" value="₹ 7.5 Lacs" />
+            <HeroEOI title="4 BHK" value="₹ 10 Lacs" />
+
+            {/* LANDMARK BLINK */}
+            <div className="relative flex items-center justify-center text-[11px] font-semibold uppercase bg-white/10 rounded-md px-2 py-2">
+              Landmark of <br /> Greater Noida
+              <span className="blink-dot" />
             </div>
           </div>
         </div>
       </div>
-
-      {/* removed small building card for cleaner mobile */}
     </section>
   );
 }
 
-/* ---------------- Overview ---------------- */
-function Overview() {
-  const items = [
-    { label: "Land Parcel", value: "5+ Acres", sub: "Master planned" },
-    { label: "Towers", value: "4 Towers", sub: "G + 25 Floors" },
-    { label: "Unit Types", value: "3 & 4 BHK", sub: "Spacious layouts" },
-    { label: "Open Spaces", value: "70%", sub: "Green landscaping" },
-  ];
-
+/* ---- HERO EOI BOX ---- */
+function HeroEOI({ title, value }: { title: string; value: string }) {
   return (
-    <section id="overview" className="border-b border-[#f0d7c2] bg-[#fff7eb]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#2b2b2b]">Project Overview</h2>
-            <p className="text-xs sm:text-sm text-[#5a5a5a] mt-2 max-w-prose">A gated community with premium 3 &amp; 4 BHK residences designed for peaceful yet connected living.</p>
+    <div className="rounded-md border border-white/20 bg-black/30 px-2 py-2">
+      <div className="text-[11px] font-semibold uppercase">{title} EOI</div>
+      <div className="text-sm font-bold">{value}</div>
+    </div>
+  );
+}
+
+
+/* ---------------- Overview ---------------- */
+
+function Overview() {
+  return (
+    <section id="overview" className="border-b border-[#e4dccf] bg-[#f6f2ea]">
+      <div className="mx-auto max-w-7xl px-4 py-10">
+        <h2 className="text-3xl font-semibold text-[#1f7a3f] mb-6">
+          Overview
+        </h2>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="bg-[#efe9dc] p-8 rounded-lg leading-relaxed text-sm text-[#2b2b2b]">
+            Welcome to <strong>Godrej Arden</strong>, a thoughtfully planned
+            residential community designed for those who value comfort,
+            elegance, and everyday well-being. Located in <strong>Sigma 3,
+            Greater Noida</strong>, the project offers a harmonious blend of
+            modern architecture and serene green surroundings.
+            <br /><br />
+            Spread across expansive landscaped acres, Godrej Arden promotes
+            a lifestyle rooted in wellness and convenience.
           </div>
 
-          <div className="hidden sm:block">
-            <PricePoint label="Starting From" price="₹ 1.25 Cr*" />
+          <div className="rounded-lg overflow-hidden">
+            <img
+              src="/overview-building.jpg"
+              alt="Godrej Arden Towers"
+              className="w-full h-full object-cover"
+            />
           </div>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((item) => (
-            <div key={item.label} className="rounded-xl border border-[#f0d7c2] bg-[#fff2df] p-4">
-              <p className="text-[11px] uppercase tracking-wide text-[#8a6f5e]">{item.label}</p>
-              <p className="mt-2 text-lg sm:text-xl font-semibold text-[#1b5e3a]">{item.value}</p>
-              <p className="mt-1 text-xs text-[#5a5a5a]">{item.sub}</p>
-            </div>
-          ))}
         </div>
       </div>
     </section>
@@ -209,29 +235,34 @@ function Overview() {
 }
 
 /* ---------------- Highlights ---------------- */
+
 function Highlights() {
   const data = [
-    { title: "Prime Location", desc: "Walking distance to schools & retail" },
-    { title: "Low Density", desc: "Only 4 towers across the masterplan" },
-    { title: "Luxury Clubhouse", desc: "Gym, pool, indoor games & party hall" },
-    { title: "Sustainable Design", desc: "70% open landscaped areas" },
+    { title: "Prime Connectivity", desc: "Near expressways & transport hubs" },
+    { title: "World-Class Amenities", desc: "Clubhouse, pool, gym & more" },
+    { title: "Spacious Homes", desc: "Thoughtfully designed layouts" },
+    { title: "Green Landscapes", desc: "Open gardens & parks" },
   ];
 
   return (
-    <section id="highlights" className="border-b border-[#f0d7c2] bg-[#fff6ee]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#2b2b2b]">Property Highlights</h2>
-          <div className="hidden sm:block">
-            <PricePoint label="Indicative" price="₹ 1.25 Cr*" />
-          </div>
-        </div>
+    <section className="border-b border-[#e4dccf] bg-[#f6f2ea]">
+      <div className="mx-auto max-w-6xl px-4 py-8">
+        <h2 className="text-3xl font-semibold text-[#1f7a3f]">
+          Property Highlights
+        </h2>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mt-6">
           {data.map((h) => (
-            <div key={h.title} className="rounded-xl border border-[#f0d7c2] bg-white p-4 shadow-sm">
-              <p className="text-sm font-semibold text-[#1b5e3a]">{h.title}</p>
-              <p className="mt-2 text-xs text-[#5a5a5a]">{h.desc}</p>
+            <div
+              key={h.title}
+              className="rounded-xl border bg-white p-4 shadow-sm"
+            >
+              <p className="text-lg font-semibold text-[#1b5e3a]">
+                {h.title}
+              </p>
+              <p className="text-xs text-[#5a5a5a] mt-1">
+                {h.desc}
+              </p>
             </div>
           ))}
         </div>
@@ -240,95 +271,48 @@ function Highlights() {
   );
 }
 
-/* ---------------- Floorplans (ONLY) ---------------- */
-function FloorPlansOnly() {
-  const plans = [
-    { id: "3bhk", title: "3 BHK", img: "/floorplan-3bhk.jpg", carpet: "1200 sq.ft (indicative)", from: "₹ 1.25 Cr*" },
-    { id: "4bhk", title: "4 BHK", img: "/floorplan-4bhk.jpg", carpet: "1600 sq.ft (indicative)", from: "₹ 1.95 Cr*" },
-  ];
+/* ---------------- Pricing ---------------- */
 
-  return (
-    <section id="floorplans" className="border-b border-[#f0d7c2] bg-[#fffaf5]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#2b2b2b]">Floor Plans</h2>
-          <div className="hidden sm:block">
-            <PricePoint label="From" price="₹ 1.25 Cr*" />
-          </div>
-        </div>
-
-        <p className="text-xs sm:text-sm text-[#5a5a5a] mb-6 max-w-prose break-words">Choose a layout to view floor plans and learn more about sizes & indicative pricing.</p>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          {plans.map((p) => (
-            <div key={p.id} className="rounded-xl border border-[#f0d7c2] bg-white p-3">
-              <div className="h-40 sm:h-48 w-full overflow-hidden rounded-md bg-[#f3eae2]">
-                <img src={p.img} alt={`${p.title} Floorplan`} className="w-full h-full object-cover" />
-              </div>
-
-              <div className="mt-3">
-                <p className="font-semibold">{p.title}</p>
-                <p className="text-xs text-[#5a5a5a]">Carpet: {p.carpet}</p>
-                <div className="mt-3">
-                  <PricePoint label="From" price={p.from} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <p className="text-xs text-[#8a6f5e] mt-3">Note: Floorplan images are illustrative.</p>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------- Pricing Only ---------------- */
 function PricingOnly() {
   return (
-    <section id="pricing" className="border-b border-[#f0d7c2] bg-[#fff4e6]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#2b2b2b]">Pricing</h2>
-          <div className="hidden sm:block">
-            <PricePoint label="From" price="₹ 1.25 Cr*" />
+    <section className="border-b border-[#e4dccf] bg-[#1f3d2b] text-white">
+      <div className="mx-auto max-w-6xl px-4 py-12">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#234a34] to-[#162a1f] p-8 shadow-xl">
+
+          {/* Title */}
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-wide">
+            Godrej Arden
+          </h2>
+          <p className="mt-1 text-sm opacity-90">
+            📍 At Sigma 3, Greater Noida
+          </p>
+
+          {/* BHK */}
+          <div className="mt-4 inline-block bg-white/15 px-4 py-2 text-sm font-semibold tracking-widest uppercase">
+            2, 3 & 4 BHK Apartments
           </div>
-        </div>
 
-        <div className="grid gap-6 md:grid-cols-2 items-start">
-          <div>
-            <div className="rounded-2xl border border-[#f0d7c2] bg-white p-4 sm:p-6 shadow-lg">
-              <h3 className="text-lg font-semibold text-[#1b5e3a]">Indicative Prices</h3>
-
-              <div className="mt-3 space-y-2">
-                <PriceRow title="3 BHK" price="₹ 1.25 Cr*" subtitle="Starting from" />
-                <PriceRow title="4 BHK" price="₹ 1.95 Cr*" subtitle="Starting from" />
-                <PriceRow title="Penthouse" price="On Request" subtitle="Custom pricing" />
-              </div>
-
-              <div className="mt-4">
-                <a href="#enquiry-form" className="block w-full rounded-md bg-[#1b5e3a] px-3 py-2 text-center text-sm font-semibold text-white">Get Exact Price</a>
-                <a href="#contact" className="mt-3 block w-full text-center text-sm underline text-[#5a5a5a]">Contact Sales</a>
-              </div>
-
-              <div className="mt-3 text-xs text-[#8a6f5e]">*Indicative price, subject to change. Taxes & registration extra.</div>
+          {/* Price */}
+          <div className="mt-6 flex items-center gap-4">
+            <div className="text-5xl font-bold">
+              ₹ 2.30 Cr*
             </div>
-
-            <div className="mt-4 rounded-lg border border-[#f0d7c2] bg-white p-3 text-sm">
-              <p className="font-medium">Quick Contact</p>
-              <p className="text-xs text-[#5a5a5a] mt-1">Use the enquiry form or the Query Now button for quick assistance.</p>
+            <div className="text-sm uppercase tracking-widest opacity-90">
+              Starting At
             </div>
           </div>
 
-          <div className="md:sticky md:top-20">
-            <div className="rounded-2xl border border-[#f0d7c2] bg-[#fff4e6] p-4 sm:p-6 shadow-lg">
-              <h3 className="text-lg font-semibold text-[#1b5e3a]">Featured Offer</h3>
-              <p className="mt-2 text-sm text-[#5a5a5a]">Pre-launch special pricing and limited availability. Contact sales for exact inventory and final costing.</p>
+          {/* Urgency */}
+          <div className="mt-4 inline-block bg-[#2e5f45] px-4 py-2 text-sm font-semibold rounded-md">
+            Hurry – Offer Ends Soon!
+          </div>
 
-              <div className="mt-4">
-                <PricePoint label="Lowest Seen" price="₹ 1.25 Cr*" />
-              </div>
-            </div>
+          {/* EOI Grid */}
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <EOIBox title="2 BHK" value="₹ 5 Lacs" />
+            <EOIBox title="3 BHK" value="₹ 7.5 Lacs" />
+            <EOIBox title="4 BHK" value="₹ 10 Lacs" />
+           
           </div>
         </div>
       </div>
@@ -336,49 +320,94 @@ function PricingOnly() {
   );
 }
 
-/* ---------------- FloorIntro (TOGGLE + IMAGE SWITCH) ---------------- */
-function FloorIntro() {
-  const [selected, setSelected] = useState<"3bhk" | "4bhk">("3bhk");
+/* ---------------- EOI Box ---------------- */
+function EOIBox({ title, value }: { title: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-white/20 bg-black/20 px-4 py-4 text-center">
+      <div className="text-sm font-semibold uppercase tracking-wide">
+        {title} EOI
+      </div>
+      <div className="mt-2 text-lg font-bold">
+        {value}
+      </div>
+    </div>
+  );
+}
 
-  const planImageMap: Record<"3bhk" | "4bhk", string> = {
+
+
+/* ---------------- Floor Plans ---------------- */
+
+function FloorPlansOnly() {
+  const plans = [
+    { id: "2bhk", title: "2 BHK", img: "/floorplan-2bhk.jpg" },
+    { id: "3bhk", title: "3 BHK", img: "/floorplan-3bhk.jpg" },
+    { id: "4bhk", title: "4 BHK", img: "/floorplan-4bhk.jpg" },
+  ];
+
+  return (
+    <section className="border-b border-[#e4dccf] bg-[#f6f2ea]">
+      <div className="mx-auto max-w-6xl px-4 py-8">
+        <h2 className="text-3xl font-semibold text-[#1f7a3f]">
+          Floor Plans
+        </h2>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-6">
+          {plans.map((p) => (
+            <div key={p.id} className="rounded-xl border bg-white p-4">
+              <img
+                src={p.img}
+                alt={p.title}
+                className="w-full h-36 object-cover rounded-md"
+              />
+              <p className="mt-2 font-semibold">{p.title}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+ 
+
+/* ---------------- FloorIntro ---------------- */
+/* ---------------- FloorIntro ---------------- */
+function FloorIntro() {
+  const [selected, setSelected] = useState<"2bhk" | "3bhk" | "4bhk">("2bhk");
+
+  const images: Record<"2bhk" | "3bhk" | "4bhk", string> = {
+    "2bhk": "/floorplan-2bhk.jpg",
     "3bhk": "/floorplan-3bhk.jpg",
     "4bhk": "/floorplan-4bhk.jpg",
   };
 
-  const altMap: Record<"3bhk" | "4bhk", string> = {
-    "3bhk": "3 BHK Floorplan",
-    "4bhk": "4 BHK Floorplan",
-  };
-
   return (
-    <section id="floorplan" className="pt-8 pb-12 bg-[#fff8f2] border-t border-[#ece2d8]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
-        <div className="text-sm text-[#6b5b50]">Floor Plan</div>
-        <h2 className="mt-2 text-2xl sm:text-3xl font-serif text-[#3f3430]">Your Vision, Our Floor Plans</h2>
-
-        <div className="mt-6 flex items-center justify-center gap-3">
-          <button
-            onClick={() => setSelected("3bhk")}
-            className={`px-4 py-2 rounded-full text-sm transition ${selected === "3bhk" ? "bg-[#6b5146] text-white shadow" : "bg-transparent border border-[#cdbfb2] text-[#4b4038]"}`}
-          >
-            3 BHK
-          </button>
-
-          <button
-            onClick={() => setSelected("4bhk")}
-            className={`px-4 py-2 rounded-full text-sm transition ${selected === "4bhk" ? "bg-[#6b5146] text-white shadow" : "bg-transparent border border-[#cdbfb2] text-[#4b4038]"}`}
-          >
-            4 BHK
-          </button>
+    <section id="floorplan" className="bg-[#fff8f2] border-t border-[#ece2d8] py-8">
+      <div className="mx-auto max-w-6xl px-4 text-center">
+        <h2 className="text-3xl font-semibold">Explore Floor Plans</h2>
+        <div className="mt-6 flex justify-center gap-3">
+          {["2bhk", "3bhk", "4bhk"].map((type) => (
+            <button
+              key={type}
+              onClick={() => setSelected(type as any)}
+              className={`px-4 py-2 rounded-full text-sm ${
+                selected === type
+                  ? "bg-[#6b5146] text-white"
+                  : "border border-[#cdbfb2] text-[#4b4038]"
+              }`}
+            >
+              {type.toUpperCase().replace("BHK", " BHK")}
+            </button>
+          ))}
         </div>
 
-        <div className="mt-6 mx-auto max-w-3xl overflow-hidden rounded-2xl border border-[#efe6dc] bg-white p-2">
-          <img src={planImageMap[selected]} alt={altMap[selected]} className="w-full h-72 sm:h-80 object-cover rounded-md" />
-        </div>
-
-        <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <a href="#pricing" className="text-sm text-[#6b5146] underline">View Prices</a>
-          <a href="#enquiry-form" className="rounded-full bg-[#1b5e3a] text-white px-4 py-2 text-sm">Enquire Now</a>
+        <div className="mt-6 mx-auto max-w-3xl border rounded-2xl bg-white p-2">
+          <img
+            src={images[selected]}
+            alt={`${selected} Floorplan`}
+            className="w-full h-72 object-cover rounded-md"
+          />
         </div>
       </div>
     </section>
@@ -388,43 +417,25 @@ function FloorIntro() {
 /* ---------------- FeaturesSection ---------------- */
 function FeaturesSection() {
   const features = [
-    "Land Area : 28 Acres",
-    "No of Units: 1594 Apartments",
-    "Sky Garden On Top Floor",
-    "High-Speed Elevators",
-    "Efficiently Planned 3 and 4 Bed Vaastu Compatible Homes",
+    "Prime location near expressways",
+    "World-class clubhouse & amenities",
+    "Kids play & activity zones",
+    "Landscaped gardens & open spaces",
+    "Modern design living spaces",
   ];
 
   return (
-    <section className="py-8 sm:py-12 bg-[#fffefc] border-t border-b border-[#ece2d8]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8 items-center">
-        <div className="flex justify-center md:justify-start">
-          <div className="w-full max-w-sm sm:max-w-md rounded-3xl overflow-hidden border border-[#e7ddd3]">
-            <img src="/pool.jpg" alt="pool" className="w-full h-56 sm:h-80 object-cover" />
-          </div>
-        </div>
-
-        <div>
-          <div className="text-sm text-[#7b6256]">Master Plan</div>
-          <h3 className="mt-2 text-2xl sm:text-3xl font-serif text-[#3f3430]">Master Plan - Your Vision, Our Plans</h3>
-
-          <ul className="mt-4 space-y-4">
-            {features.map((f) => (
-              <li key={f} className="flex items-start gap-3 border-b pb-3">
-                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d9cfc5] text-[#6b5146]">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 12l2 2 4-4" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </span>
-                <span className="text-sm sm:text-base text-[#4b4038] break-words">{f}</span>
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-4">
-            <a href="#highlights" className="inline-flex items-center gap-2 bg-[#6b5146] text-white px-4 py-2 rounded-full shadow text-sm">
-              View More
-            </a>
-          </div>
-        </div>
+    <section className="py-8 bg-[#fffefc] border-t border-[#ece2d8]">
+      <div className="mx-auto max-w-6xl px-4">
+        <h2 className="text-3xl font-semibold text-[#2b2b2b]">Key Features</h2>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+          {features.map((f) => (
+            <li key={f} className="flex items-start gap-3 border-b pb-2">
+              <span className="text-xl text-[#1b5e3a]">✔</span>
+              <span className="text-sm text-[#4b4038]">{f}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -432,43 +443,165 @@ function FeaturesSection() {
 
 /* ---------------- Amenities ---------------- */
 function Amenities() {
-  const amen = ["Grand Clubhouse", "Swimming Pool", "Kids’ Pool", "Fully Equipped Gym", "Indoor Games Room", "Multipurpose Party Hall", "Yoga & Meditation Deck", "Jogging Track"];
+ const amenities = [
+  { label: "Fruit Orchard", img: "/amenities/fruit-orchard.jpg" },
+  { label: "Swimming Pool", img: "/amenities/swimming-pool.jpg" },
+  { label: "Multipurpose Court", img: "/amenities/multipurpose-court.jpg" },
+  { label: "Cricket Pitch", img: "/amenities/cricket-pitch.jpg" },
+  { label: "Outdoor Meditation Area", img: "/amenities/outdoor-meditation.jpg" },
+];
+
+
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % amenities.length);
+    }, 3000); // 3 seconds
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <section id="amenities" className="border-b border-[#f0d7c2] bg-[#fffaf5]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Amenities</h2>
-          <div className="hidden sm:block"><PricePoint label="From" price="₹ 1.25 Cr*" /></div>
+    <section id="amenities" className="bg-[#fffaf5] py-10 border-b border-[#f0d7c2]">
+      <div className="mx-auto max-w-6xl px-4">
+        <h2 className="text-3xl font-semibold text-[#2b2b2b] text-center">
+          Amenities
+        </h2>
+
+        <div className="relative mt-6 h-[300px] sm:h-[380px] lg:h-[450px] overflow-hidden rounded-xl border bg-white shadow-md">
+          {amenities.map((amenity, index) => (
+            <div
+              key={amenity.label}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                index === current ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <img
+                src={amenity.img}
+                alt={amenity.label}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                {amenity.label}
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {amen.map((a) => (
-            <div key={a} className="rounded-xl border border-[#f0d7c2] bg-white p-3 text-sm">
-              <p className="font-semibold text-[#1b5e3a] break-words">{a}</p>
-            </div>
+        <div className="flex justify-center gap-2 mt-4">
+          {amenities.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrent(idx)}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                idx === current ? "bg-[#1b5e3a]" : "bg-[#cbd5e1]"
+              }`}
+            />
           ))}
         </div>
       </div>
     </section>
   );
 }
+
+
 
 /* ---------------- Gallery ---------------- */
 function Gallery() {
-  const imgs = ["/gallery1.jpg", "/gallery2.jpg", "/gallery3.jpg", "/gallery4.jpg"];
-  return (
-    <section id="gallery" className="border-b border-[#f0d7c2] bg-[#fff7f0]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Gallery</h2>
-          <div className="hidden sm:block"><PricePoint label="Indicative" price="₹ 1.25 Cr*" /></div>
-        </div>
+  const imgs = [
+    "/gallery1.jpg",
+    "/gallery2.jpg",
+    "/gallery3.jpg",
+    "/gallery4.jpg",
+    "/gallery5.jpg",
+    "/gallery6.jpg",
+    "/gallery7.jpg"
+  ];
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {imgs.map((s) => (
-            <div key={s} className="overflow-hidden rounded-xl border border-[#f0d7c2] bg-white">
-              <img src={s} alt="Gallery item" className="h-28 sm:h-40 w-full object-cover" />
+  return (
+    <section id="gallery" className="overflow-hidden bg-[#fff7f0] py-8 border-b border-[#f0d7c2]">
+      <div className="mx-auto max-w-6xl px-4">
+        <h2 className="text-3xl font-semibold text-[#2b2b2b]">Gallery</h2>
+
+        <div className="relative mt-6 overflow-x-hidden">
+          <div className="flex animate-scroll gap-4 whitespace-nowrap">
+            {[...imgs, ...imgs].map((src, index) => (
+              <div key={index} className="inline-block w-60 flex-shrink-0">
+                <img
+                  src={src}
+                  alt={`gallery-${index + 1}`}
+                  className="w-full h-44 object-cover rounded-lg"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-scroll {
+          animation: scroll 28s linear infinite;
+        }
+      `}</style>
+    </section>
+  );
+}
+
+
+
+/* ---------------- LocationMapLeft ---------------- */
+/* ---------------- LocationMapLeft ---------------- */
+/* ---------------- LocationMapLeft ---------------- */
+function LocationMapLeft() {
+  const locations = [
+    { label: "Yamuna Expressway", time: "5 Mins", icon: "🛣️" },
+    { label: "IGI International Airport", time: "50 Mins", icon: "✈️" },
+    { label: "Cambridge School, Greater Noida", time: "12 Mins", icon: "🏫" },
+    { label: "Fortis Hospital", time: "5 Mins", icon: "🏥" },
+    { label: "The Grand Venice Mall", time: "10 Mins", icon: "🏬" },
+    { label: "Stellar Business Park", time: "16 Mins", icon: "🏢" },
+  ];
+
+  return (
+    <section id="location" className="border-b border-[#f0d7c2] bg-white">
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        {/* Main Heading */}
+        <h2 className="text-3xl font-semibold text-[#2b2b2b] mb-6">
+          Location
+        </h2>
+
+        {/* Top Description */}
+        <p className="text-sm md:text-base text-[#4b4038] leading-relaxed max-w-5xl">
+          Godrej Arden enjoys a prime address in <strong>Sigma III, Greater Noida</strong>,
+          one of the city’s most promising and well-planned neighbourhoods.
+          Thoughtfully located away from the bustle yet close to every urban
+          comfort, it brings together the serenity of nature with excellent
+          connectivity.
+          <br /><br />
+          With seamless access to the Noida Expressway, Yamuna Expressway and
+          FNG Corridor, residents enjoy smooth connectivity to Noida, Delhi
+          and Gurugram. The upcoming Jewar International Airport and proposed
+          metro line further enhance the area’s future potential.
+        </p>
+
+        {/* Sub Heading */}
+        <h3 className="mt-8 text-2xl font-semibold text-[#1b5e3a]">
+          Perfectly Placed for a Well-Connected Life
+        </h3>
+
+        {/* Icon Grid */}
+        <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 text-center">
+          {locations.map((item) => (
+            <div key={item.label} className="flex flex-col items-center gap-2">
+              <div className="text-4xl">{item.icon}</div>
+              <p className="text-xs font-semibold text-[#1b5e3a] uppercase">
+                {item.label}
+              </p>
+              <p className="text-xs text-[#6b5b50]">– {item.time}</p>
             </div>
           ))}
         </div>
@@ -477,264 +610,143 @@ function Gallery() {
   );
 }
 
-/* ---------------- Location: MAP LEFT, TEXT RIGHT ---------------- */
-function LocationMapLeft() {
-  return (
-    <section id="location" className="border-b border-[#f0d7c2] bg-[#fffaf0]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Location</h2>
-          <div className="hidden sm:block"><PricePoint label="Starting" price="₹ 1.25 Cr*" /></div>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 items-center">
-          <div className="order-2 md:order-1">
-            <div className="rounded-xl overflow-hidden border shadow-sm">
-              <img src="/hsr_map.jpg" alt="HSR Map" className="w-full h-56 sm:h-80 object-cover" />
-            </div>
-          </div>
-
-          <div className="order-1 md:order-2">
-            <p className="text-sm text-[#5a5a5a] mb-3">
-              HSR Layout, Sector 2 — centrally located with quick access to schools, hospitals, retail and IT hubs.
-            </p>
-            <ul className="grid gap-2 text-sm">
-              <li><strong>Nearest Metro:</strong> Silk Board / Upcoming HSR Metro (est)</li>
-              <li><strong>Schools:</strong> XYZ International, ABC High School</li>
-              <li><strong>Hospitals:</strong> Good Health Hospital (5 km)</li>
-              <li><strong>Retail:</strong> Nearby mall & high-street shopping</li>
-            </ul>
-
-            <div className="mt-4 flex gap-3">
-              <a href="#floorplan" className="inline-flex items-center gap-2 rounded-full border border-[#e9e0d6] px-3 py-2 bg-white shadow-sm text-sm">
-                View Floor Plans
-              </a>
-              <a href="#enquiry-form" className="ml-0 sm:ml-3 inline-flex items-center gap-2 rounded-full bg-[#1b5e3a] text-white px-3 py-2 text-sm">Enquire Now</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------- Enquiry (LEFT: FORM FIELDS, RIGHT: INFO + DISCLAIMER) ---------------- */
+/* ---------------- Enquiry ---------------- */
 function Enquiry() {
   return (
-    <section id="enquiry-form" className="py-8 sm:py-10 bg-[#fffaf5] border-t border-[#ece2d8]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-8 md:grid-cols-2 items-start">
-          <div>
-            <h3 className="text-xl sm:text-2xl font-semibold text-[#3f3430]">Get Full Details & Pre-Launch Offer</h3>
-            <p className="mt-2 text-xs sm:text-sm text-[#6b5b50]">Share your contact details and our team will reach out shortly.</p>
-
-            <div className="mt-4 bg-white rounded-xl p-4 sm:p-6 border border[#e9e0d6] shadow-sm">
-              <FormFull />
-            </div>
-          </div>
-
-          <aside>
-            <div className="rounded-xl border border-[#f0d7c2] bg-white p-4 sm:p-6 shadow-sm">
-              <h4 className="text-lg font-semibold text-[#1b5e3a]">Quick Contact</h4>
-              <p className="mt-2 text-sm text-[#5a5a5a]">
-                Use the enquiry form or the Query Now button for immediate assistance.
-              </p>
-
-              <div className="mt-4 border-t border-[#efe6dc] pt-4">
-                <h5 className="text-sm font-semibold text-[#4b4038]">Office Hours</h5>
-                <p className="text-xs text-[#6b5b50] mt-1">Mon — Sat: 9:30 AM — 6:30 PM</p>
-                <p className="text-xs text-[#6b5b50] mt-1">Sunday: By appointment</p>
-              </div>
-
-              <div className="mt-4 border-t border-[#efe6dc] pt-4">
-                <h5 className="text-sm font-semibold text-[#4b4038]">Pricing Note</h5>
-                <p className="text-xs text-[#6b5b50] mt-1">Indicative prices are subject to availability, taxes & registration charges.</p>
-              </div>
-
-              <div className="mt-4 border-t border-[#efe6dc] pt-4">
-                <h5 className="text-sm font-semibold text-[#4b4038]">Disclaimer</h5>
-                <p className="text-xs text-[#6b5b50] mt-1">
-                  By submitting this form you consent to be contacted by the sales team via phone, SMS or WhatsApp for
-                  information about this project. Information provided is indicative and not a legal offer. Final prices, plans
-                  and availability will be confirmed by the developer/sales team.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-3 rounded-lg border border-[#f0d7c2] bg-[#fff7eb] p-3 text-sm">
-              <p className="font-medium text-[#4b4038]">Need faster response?</p>
-              <p className="text-xs text-[#6b5b50] mt-1">Use the Query Now button for immediate assistance.</p>
-            </div>
-          </aside>
-        </div>
+    <section id="enquiry-form" className="py-8 bg-[#fffaf5] border-t border-[#ece2d8]">
+      <div className="mx-auto max-w-6xl px-4">
+        <h2 className="text-3xl font-semibold text-[#3f3430]">Get Full Project Details</h2>
+        <p className="mt-2 text-sm text-[#6b5b50]">
+          Share your details and our team will contact you with pricing, floor plans and offers.
+        </p>
+        <FormFull />
       </div>
     </section>
   );
 }
 
-/* ---------------- FormFull (LEFT FORM) - mobile friendly ---------------- */
+/* ---------------- FormFull ---------------- */
 function FormFull() {
   const [submitting, setSubmitting] = useState(false);
   const [agree, setAgree] = useState(false);
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!agree) {
-      alert("Please accept the disclaimer to proceed.");
-      return;
-    }
+    if (!agree) return alert("Please accept the contact consent.");
     setSubmitting(true);
     setTimeout(() => {
       setSubmitting(false);
-      alert("Enquiry sent! We'll contact you shortly.");
+      alert("Enquiry submitted — our team will reach out!");
     }, 700);
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3">
+    <form onSubmit={onSubmit} className="mt-6 space-y-4 bg-white p-6 rounded-xl border">
       <div>
-        <label className="block text-xs text-[#6b5b50]">Full name <span className="text-red-600">*</span></label>
-        <input name="name" required className="mt-1 w-full rounded-md border border-[#e9e0d6] px-3 py-2 text-sm" />
-      </div>
-
-      <div>
-        <label className="block text-xs text-[#6b5b50]">Email <span className="text-[#6b5b50] text-xs">(optional)</span></label>
-        <input name="email" type="email" className="mt-1 w-full rounded-md border border-[#e9e0d6] px-3 py-2 text-sm" />
-      </div>
-
-      <div>
-        <label className="block text-xs text-[#6b5b50]">Mobile <span className="text-red-600">*</span></label>
-        <input name="phone" type="tel" inputMode="tel" required className="mt-1 w-full rounded-md border border-[#e9e0d6] px-3 py-2 text-sm" />
+        <label className="block text-xs text-[#6b5b50]">Full Name*</label>
+        <input
+          type="text"
+          required
+          className="mt-1 w-full rounded-md border px-3 py-2"
+          placeholder="Enter your full name"
+        />
       </div>
 
       <div>
-        <label className="block text-xs text-[#6b5b50]">Project</label>
-        <input name="project" defaultValue="Birla Evara" className="mt-1 w-full rounded-md border border-[#e9e0d6] px-3 py-2 text-sm" />
+        <label className="block text-xs text-[#6b5b50]">Mobile Number*</label>
+        <input
+          type="tel"
+          required
+          className="mt-1 w-full rounded-md border px-3 py-2"
+          placeholder="Enter your mobile number"
+        />
       </div>
 
-      <div className="flex items-start gap-3">
-        <div className="flex-1">
-          <label className="inline-flex items-start text-sm text-[#5a5a5a]">
-            <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} className="mr-2 mt-1" />
-            <span>I agree to be contacted and accept the disclaimer.</span>
-          </label>
-        </div>
-
-        <div className="flex-shrink-0 w-full md:w-auto">
-          <button type="submit" disabled={submitting} className="w-full md:w-auto rounded-full bg-[#6b5146] text-white px-4 py-2 text-sm">
-            {submitting ? "Sending..." : "Submit Enquiry"}
-          </button>
-        </div>
+      <div className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={agree}
+          onChange={(e) => setAgree(e.target.checked)}
+        />
+        <span className="text-xs text-[#5a5a5a]">
+          I agree to be contacted for project information.
+        </span>
       </div>
+
+      <button
+        type="submit"
+        disabled={submitting}
+        className="w-full rounded-full bg-[#6b5146] text-white px-4 py-2"
+      >
+        {submitting ? "Sending..." : "Submit Enquiry"}
+      </button>
     </form>
   );
 }
 
-/* ---------------- Footer ---------------- */
-function Footer() {
-  return (
-    <footer className="border-t border-[#e9e0d6] bg-[#f3eadf] py-6 mt-10">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-[#6b5b50]">
-          <div>
-            <div>© {new Date().getFullYear()} Birla Evara</div>
-            <div className="text-xs text-[#6b5b50] mt-1">RERA No.: ABCD/PRM/123456/2025</div>
-          </div>
-
-          <div className="text-xs text-[#6b5b50]">
-            Disclaimer: The information provided on this site is for general information only and does not constitute an offer or contract.
-          </div>
-
-          <div className="text-sm">
-            <a href="#contact" className="underline text-[#4b4038]">Contact Sales</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-/* ---------------- PricePoint small badge ---------------- */
-function PricePoint({ label = "Starting From", price = "₹ 1.25 Cr*" }: { label?: string; price?: string }) {
-  return (
-    <div className="inline-flex items-baseline gap-2 rounded-lg border border-[#f0d7c2] bg-white px-2 py-1 text-sm shadow-sm">
-      <div className="text-[11px] text-[#8a6f5e]">{label}</div>
-      <div className="text-sm font-semibold text-[#1b5e3a]">{price}</div>
-    </div>
-  );
-}
-
-/* ---------------- Price Badge Floating bottom-right (hidden on small) ---------------- */
-function PriceBadgeFloating() {
-  return (
-    <div className="hidden md:block fixed right-6 bottom-6 z-50">
-      <div className="rounded-lg bg-white border border-[#e9e0d6] px-4 py-2 shadow-md text-sm">
-        Starting From <span className="ml-2 font-semibold text-[#1b5e3a]">₹ 1.25 Cr*</span>
-      </div>
-    </div>
-  );
-}
-
-/* ---------------- Floating Query Now Tab (moved to top-right) ---------------- */
+/* ---------------- Floating UI & Footer Below... (next message) */
+/* ---------------- FloatingQueryTab ---------------- */
 function FloatingQueryTab() {
   return (
     <a
       href="#enquiry-form"
-      className="hidden md:flex fixed right-6 top-6 z-50 items-center rounded-full bg-[#6b5146] text-white px-4 py-2 shadow-lg"
-      aria-label="Query Now"
+      className="hidden md:flex fixed right-6 top-6 z-50 items-center bg-[#6b5146] text-white px-4 py-2 rounded-full shadow-lg"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M21 15a2 2 0 0 1-2 2h-1l-3 3v-3H8a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
       Query Now
     </a>
   );
 }
 
-/* ---------------- Floating Call + WhatsApp -> scroll to enquiry form (hidden on small) ---------------- */
+/* ---------------- FloatingIcons ---------------- */
 function FloatingIcons() {
-  function goToEnquiry(e: React.MouseEvent) {
+  function scrollToForm(e: React.MouseEvent) {
     e.preventDefault();
     const el = document.getElementById("enquiry-form");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-      setTimeout(() => {
-        const first = el.querySelector<HTMLInputElement>("input, textarea, select");
-        if (first) first.focus();
-      }, 350);
-    }
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   }
 
   return (
     <div className="hidden md:flex fixed right-0 top-1/2 -translate-y-1/2 z-50 flex-col gap-2">
-      <button onClick={goToEnquiry} type="button" aria-label="Open enquiry form" className="w-12 h-12 rounded-l-xl bg-[#6b5146] text-white flex items-center justify-center shadow">
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.054 15.054 0 0 0 6.59 6.59l2.2-2.2"/></svg>
+      <button
+        onClick={scrollToForm}
+        className="w-12 h-12 rounded-l-xl bg-[#6b5146] text-white flex items-center justify-center shadow"
+      >
+        📞
       </button>
-
-      <button onClick={goToEnquiry} type="button" aria-label="Open enquiry form" className="w-12 h-12 rounded-l-xl bg-[#25D366] text-white flex items-center justify-center shadow">
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A10.08 10.08 0 1 0 6.34 20.64"/></svg>
+      <button
+        onClick={scrollToForm}
+        className="w-12 h-12 rounded-l-xl bg-[#25D366] text-white flex items-center justify-center shadow"
+      >
+        💬
       </button>
     </div>
   );
 }
+/* ---------------- PriceBadgeFloating ---------------- */
+function PriceBadgeFloating() {
+  return (
+    <div className="hidden md:block fixed right-6 bottom-6 z-50">
+      <div className="rounded-lg bg-white border border-[#e9e0d6] px-4 py-2 shadow-md text-sm font-semibold text-[#1b5e3a]">
+        Starting From <span className="ml-2">₹ 2.30 Cr*</span>
+      </div>
+    </div>
+  );
+}
 
-/* ---------------- Floating quick popup (hidden on small) ---------------- */
+
+/* ---------------- FloatingPopup ---------------- */
 function FloatingPopup() {
   const [open, setOpen] = useState(false);
   const [minimized, setMinimized] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setOpen(true), 3000);
+    const t = setTimeout(() => setOpen(true), 3500);
     return () => clearTimeout(t);
   }, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const f = e.currentTarget;
-    const data = new FormData(f);
-    // eslint-disable-next-line no-console
-    console.log("popup submit", Object.fromEntries(data.entries()));
     setShowSuccess(true);
     setOpen(false);
   }
@@ -742,51 +754,69 @@ function FloatingPopup() {
   if (!open) return null;
 
   return (
-    <div className="hidden md:flex fixed right-6 bottom-6 z-50 flex-col items-end" aria-live="polite">
+    <div className="hidden md:flex fixed right-6 bottom-6 z-50 flex-col items-end">
       {minimized ? (
-        <div className="flex items-center gap-2 rounded-full border-4 border-[#7b4b2a] bg-[#ff9b42] px-4 py-2 shadow-lg">
-          <button onClick={() => setMinimized(false)} className="text-sm font-semibold text-red-700">Quick Enquiry</button>
-          <button onClick={() => setOpen(false)} className="text-xs text-black underline">Close</button>
+        <div className="flex items-center gap-2 bg-[#ff9b42] px-4 py-2 shadow-lg rounded-full">
+          <button onClick={() => setMinimized(false)} className="text-sm font-semibold">
+            Quick Enquiry
+          </button>
+          <button onClick={() => setOpen(false)} className="text-xs underline">
+            Close
+          </button>
         </div>
       ) : (
-        <div className="w-[320px] rounded-xl border-4 border-[#7b4b2a] bg-[#ff9b42] p-4 shadow-2xl">
-          <div className="mb-2 flex items-center justify-between">
-            <h3 className="text-base font-bold text-red-700">Quick Enquiry</h3>
-            <div className="flex items-center gap-2">
-              <button onClick={() => setMinimized(true)} className="text-xs text-black underline">Minimize</button>
-              <button onClick={() => setOpen(false)} className="text-xs text-black underline">Close</button>
+        <div className="w-[320px] bg-[#ff9b42] p-4 rounded-xl shadow-2xl">
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="font-bold text-black">Quick Enquiry</h3>
+            <div className="flex gap-2">
+              <button onClick={() => setMinimized(true)} className="text-xs underline">
+                Minimize
+              </button>
+              <button onClick={() => setOpen(false)} className="text-xs underline">
+                Close
+              </button>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3 text-sm">
             <div>
-              <label className="text-black font-semibold text-xs">Name</label>
-              <input name="name" required className="mt-1 w-full rounded-md border px-3 py-2" placeholder="Enter your name" />
-            </div>
-            <div>
-              <label className="text-black font-semibold text-xs">Mobile</label>
-              <input name="mobile" required className="mt-1 w-full rounded-md border px-3 py-2" placeholder="Enter mobile" />
-            </div>
-            <div>
-              <label className="text-black font-semibold text-xs">Project</label>
-              <input name="project" defaultValue="Birla Evara" className="mt-1 w-full rounded-md border px-3 py-2" />
+              <label className="block text-xs font-semibold text-black">Name</label>
+              <input
+                name="name"
+                required
+                className="mt-1 w-full rounded-md border px-3 py-2"
+                placeholder="Enter your name"
+              />
             </div>
 
-            <div className="flex gap-2">
-              <button type="submit" className="mt-1 w-full rounded-md bg-red-700 py-2 text-sm font-semibold text-white">Submit</button>
+            <div>
+              <label className="block text-xs font-semibold text-black">Mobile</label>
+              <input
+                name="mobile"
+                required
+                className="mt-1 w-full rounded-md border px-3 py-2"
+                placeholder="Enter mobile"
+              />
             </div>
+
+            <button
+              type="submit"
+              className="w-full bg-black text-white py-2 rounded-md text-sm font-semibold"
+            >
+              Submit
+            </button>
           </form>
         </div>
       )}
 
       {showSuccess && (
         <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
-            <h3 className="text-lg font-semibold text-[#1b5e3a]">Form submitted</h3>
-            <p className="mt-2 text-sm text-[#5a5a5a]">Thanks — our team will contact you shortly.</p>
-            <div className="mt-4 flex gap-2">
-              <button onClick={() => setShowSuccess(false)} className="px-4 py-2 rounded-md border">Close</button>
-            </div>
+          <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+            <h3 className="font-semibold text-lg">Submitted</h3>
+            <p className="mt-2 text-sm">Thanks! We'll contact you soon.</p>
+            <button onClick={() => setShowSuccess(false)} className="mt-4 text-sm underline">
+              Close
+            </button>
           </div>
         </div>
       )}
@@ -794,15 +824,43 @@ function FloatingPopup() {
   );
 }
 
-/* ---------------- Price row helper ---------------- */
-function PriceRow({ title, price, subtitle }: { title: string; price: string; subtitle?: string }) {
+/* ---------------- Price Helpers ---------------- */
+function PricePoint({ label = "Starting From", price = "₹ 2.30 Cr*" }: { label?: string; price?: string }) {
   return (
-    <div className="flex items-center justify-between border-b border-[#efe6dc] py-2">
-      <div>
-        <div className="text-sm font-medium text-[#4b4038]">{title}</div>
-        {subtitle && <div className="text-xs text-[#6b5b50]">{subtitle}</div>}
-      </div>
+    <div className="inline-flex items-baseline gap-2 rounded-lg border bg-white px-2 py-1 text-sm shadow-sm">
+      <div className="text-[11px] text-[#8a6f5e]">{label}</div>
       <div className="text-sm font-semibold text-[#1b5e3a]">{price}</div>
     </div>
+  );
+}
+
+function PriceRow({ title, price }: { title: string; price: string }) {
+  return (
+    <div className="flex justify-between py-2 border-b">
+      <div className="text-sm font-medium text-[#4b4038]">{title}</div>
+      <div className="text-sm font-semibold text-[#1b5e3a]">{price}</div>
+    </div>
+  );
+}
+
+/* ---------------- Footer ---------------- */
+function Footer() {
+  return (
+    <footer className="border-t border-[#e9e0d6] bg-[#f3eadf] py-8 text-sm text-[#6b5b50]">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div>
+          <div>© {new Date().getFullYear()} Godrej Arden</div>
+          <div className="text-xs mt-1">RERA No.: UPRERAPRJ110163/08/2025</div>
+        </div>
+
+        <p className="text-xs text-center md:text-left">
+          Disclaimer: The information provided on this site is for general information only and does not constitute an offer or contract.
+        </p>
+
+        <a href="#enquiry-form" className="underline text-[#4b4038]">
+          Contact Sales
+        </a>
+      </div>
+    </footer>
   );
 }
